@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+<title>فروشگاه لوازم خیاطی الخلیل</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#0d5c8c;--blue-dark:#073b5c;--blue-light:#e7f2f9;--blue-mid:#bfe0f0;
+  --accent:#f2a93b;--accent-light:#fef3e0;
+  --bg:#eef3f6;--white:#fff;--gray:#85909a;--text:#1f2a33;
+  --radius:16px;--shadow:0 2px 12px rgba(13,92,140,.10);
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Vazirmatn',sans-serif;background:#06222f}
+
+.shell{
+  width:100%;max-width:460px;display:flex;flex-direction:column;
+  position:fixed;inset:0;margin:0 auto;
+  border-radius:0;overflow:hidden;box-shadow:none;
+}
+@media (min-width:480px){
+  .shell{
+    inset:2vh auto auto auto; top:2vh; bottom:2vh; left:50%; transform:translateX(-50%);
+    height:96vh; height:96dvh; max-height:760px; border-radius:22px;
+    box-shadow:0 30px 80px rgba(0,0,0,.6);
+  }
+}
+
+/* HEADER */
+.hdr{background:linear-gradient(150deg,var(--blue-dark) 0%,var(--blue) 100%);padding:0 16px;flex-shrink:0}
+.hdr-top{display:flex;align-items:center;gap:11px;padding:15px 0 11px;transition:padding .25s ease}
+.hdr.compact .hdr-top{padding:9px 0 7px}
+.hdr.compact .logo-circle{width:34px;height:44px;transition:width .25s ease, height .25s ease}
+.hdr.compact .hdr-info h1{font-size:14.5px}
+.hdr.compact .hdr-info p{font-size:10.5px}
+.logo-circle{width:48px;height:62px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-circle svg{width:100%;height:100%}
+.hdr-info{flex:1;min-width:0}
+.hdr-info h1{font-size:17px;font-weight:800;color:#fff;letter-spacing:.01em}
+.hdr-info p{font-size:11.5px;color:rgba(255,255,255,.75);margin-top:2px;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dot{width:6px;height:6px;background:#52d68a;border-radius:50%;display:inline-block;flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hdr-actions{display:flex;gap:6px;flex-shrink:0}
+.hdr-btn{background:rgba(255,255,255,.16);border:none;color:#fff;border-radius:20px;padding:6px 11px;font-size:11.5px;font-family:'Vazirmatn',sans-serif;cursor:pointer;transition:.2s;white-space:nowrap}
+.hdr-btn:hover{background:rgba(255,255,255,.3)}
+
+.search-bar{display:flex;align-items:center;background:rgba(255,255,255,.16);border-radius:25px;padding:7px 13px;margin-bottom:12px;gap:8px}
+.search-bar input{flex:1;background:none;border:none;outline:none;color:#fff;font-family:'Vazirmatn',sans-serif;font-size:14.5px;direction:rtl}
+.search-bar input::placeholder{color:rgba(255,255,255,.6)}
+.search-bar svg{flex-shrink:0}
+
+.hdr-collapsible{max-height:200px;overflow:hidden;transition:max-height .25s ease, opacity .2s ease;opacity:1}
+.hdr.compact .hdr-collapsible{max-height:0;opacity:0}
+.filter-row{display:flex;gap:6px;padding-bottom:12px;overflow-x:auto;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.chip{background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.9);border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;white-space:nowrap;transition:.2s;font-family:'Vazirmatn',sans-serif}
+.chip.active,.chip:hover{background:#fff;color:var(--blue-dark);border-color:transparent;font-weight:700}
+
+/* MESSAGES */
+.msgs{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 13px;display:flex;flex-direction:column;gap:10px;background:var(--bg);scroll-behavior:smooth}
+.msgs::-webkit-scrollbar{width:3px}
+.msgs::-webkit-scrollbar-thumb{background:var(--blue-mid);border-radius:4px}
+.msg{max-width:88%;animation:fadeUp .22s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{align-self:flex-start}.msg.user{align-self:flex-end}
+.bubble{padding:10px 14px;border-radius:var(--radius);font-size:14.5px;line-height:1.85}
+.msg.bot .bubble{background:var(--white);color:var(--text);border-bottom-right-radius:5px;box-shadow:var(--shadow)}
+.msg.user .bubble{background:var(--blue);color:#fff;border-bottom-left-radius:5px}
+.msg-time{font-size:10.5px;color:#a9b6bf;margin-top:3px;padding:0 3px}
+.msg.user .msg-time{text-align:left}
+
+.qbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.qbtn{background:var(--white);border:1.5px solid var(--blue);color:var(--blue);padding:7px 13px;border-radius:20px;font-size:13px;cursor:pointer;font-family:'Vazirmatn',sans-serif;transition:.2s;font-weight:500;box-shadow:var(--shadow)}
+.qbtn:hover{background:var(--blue);color:#fff}
+
+.typing-wrap{display:flex;gap:5px;align-items:center;padding:10px 14px;background:var(--white);border-radius:var(--radius);border-bottom-right-radius:5px;width:fit-content;box-shadow:var(--shadow)}
+.typing-wrap span{width:6px;height:6px;background:var(--blue);border-radius:50%;animation:bounce 1.2s infinite}
+.typing-wrap span:nth-child(2){animation-delay:.2s}.typing-wrap span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-6px);opacity:1}}
+
+/* INPUT */
+.inp-area{padding:11px 13px;background:var(--white);border-top:1px solid #e3eaf0;display:flex;gap:8px;align-items:center;flex-shrink:0}
+.inp-area input{flex:1;border:1.5px solid #ddd;border-radius:25px;padding:10px 15px;font-family:'Vazirmatn',sans-serif;font-size:14.5px;outline:none;background:#fafafa;direction:rtl;transition:.2s}
+.inp-area input:focus{border-color:var(--blue);background:#fff}
+.send-btn{width:40px;height:40px;background:var(--blue);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}
+.send-btn:hover{background:var(--blue-dark)}.send-btn:active{transform:scale(.93)}
+.send-btn svg{width:17px;height:17px;fill:#fff}
+
+/* PRODUCT CARD */
+.pcard{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-top:6px;max-width:290px;border:1px solid #eef3f6}
+.pcard-img{width:100%;height:150px;object-fit:cover;display:block;cursor:pointer;background:var(--blue-light)}
+.pcard-no-img{width:100%;height:100px;background:linear-gradient(135deg,var(--blue-light),var(--blue-mid));display:flex;align-items:center;justify-content:center;font-size:34px}
+.pcard-body{padding:12px 14px}
+.pcard-name{font-weight:700;font-size:15px;color:var(--blue-dark);margin-bottom:2px}
+.pcard-badge{display:inline-block;background:var(--accent-light);color:#b5780f;font-size:11.5px;font-weight:600;border-radius:10px;padding:3px 9px;margin-bottom:8px}
+.pcard-sizes{display:flex;flex-direction:column;gap:3px;margin-bottom:9px}
+.pcard-row{display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0;border-bottom:1px solid #f5f5f5}
+.pcard-row:last-child{border:none}
+.pcard-slabel{color:#555}.pcard-price{font-weight:700;color:var(--blue)}
+.pcard-actions{display:flex;gap:7px}
+.btn-order{flex:1;background:var(--blue);color:#fff;border:none;padding:9px;font-family:'Vazirmatn',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;border-radius:10px;transition:.2s}
+.btn-order:hover{background:var(--blue-dark)}
+.btn-size-guide{background:var(--accent-light);color:#b5780f;border:none;padding:9px 11px;font-family:'Vazirmatn',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border-radius:10px;white-space:nowrap}
+
+/* category browse card (for category listing in chat) */
+.cat-list{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);margin-top:6px;max-width:290px;overflow:hidden;border:1px solid #eef3f6}
+.cat-list-item{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;border-bottom:1px solid #f2f2f2;cursor:pointer;transition:.15s}
+.cat-list-item:last-child{border:none}
+.cat-list-item:hover{background:var(--blue-light)}
+.cat-list-name{font-size:14px;font-weight:600;color:var(--text)}
+.cat-list-arrow{color:var(--blue);font-size:16px}
+
+/* ORDER FORM */
+.oform{background:var(--white);border:1.5px solid var(--blue);border-radius:var(--radius);padding:15px;margin-top:6px;max-width:300px}
+.oform h4{font-size:14.5px;font-weight:700;color:var(--blue-dark);margin-bottom:10px;border-bottom:1px solid var(--blue-light);padding-bottom:8px}
+.ofield{display:flex;flex-direction:column;gap:4px;margin-bottom:9px}
+.ofield label{font-size:12.5px;color:#666;font-weight:500}
+.ofield input,.ofield select,.ofield textarea{border:1.5px solid #ddd;border-radius:9px;padding:9px 12px;font-family:'Vazirmatn',sans-serif;font-size:14px;outline:none;background:#fafafa;direction:rtl}
+.ofield input:focus,.ofield select:focus{border-color:var(--blue)}
+.ofield textarea{resize:none;height:58px}
+.btn-wa{width:100%;background:#25d366;color:#fff;border:none;border-radius:10px;padding:11px;font-family:'Vazirmatn',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:4px}
+.btn-wa:hover{background:#128c7e}
+.wa-hint{font-size:11px;color:#999;text-align:center;margin-top:6px}
+
+/* TRACKING */
+.track-box{background:var(--white);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow);margin-top:6px;max-width:300px}
+.track-box h4{font-size:14.5px;font-weight:700;color:var(--blue-dark);margin-bottom:10px}
+.track-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.track-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.track-icon.done{background:var(--blue-light)}
+.track-icon.active{background:var(--accent-light)}
+.track-icon.pending{background:#f5f5f5}
+.track-label{font-size:13.5px;font-weight:600;color:var(--text)}
+.track-sub{font-size:12px;color:var(--gray);margin-top:2px}
+
+/* SIZE GUIDE */
+.sg-table{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-top:6px;font-size:13px}
+.sg-head{background:var(--blue);color:#fff;padding:9px 13px;font-weight:700;font-size:13.5px}
+.sg-row{display:flex;border-bottom:1px solid #f0f0f0}
+.sg-row:last-child{border:none}
+.sg-row:nth-child(even){background:#f9fbfd}
+.sg-cell{flex:1;padding:8px 11px;color:#444}
+.sg-cell.head{font-weight:600;color:var(--blue-dark);background:var(--blue-light)}
+.sg-note{font-size:12px;color:#888;padding:8px 12px;background:#fafafa;border-top:1px solid #f0f0f0}
+
+/* contact card */
+.contact-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);margin-top:6px;max-width:290px;overflow:hidden;border:1px solid #eef3f6}
+.contact-head{background:linear-gradient(135deg,var(--blue-dark),var(--blue));padding:16px;text-align:center;color:#fff}
+.contact-head .logo-big{width:58px;height:58px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.contact-head .logo-big svg{width:100%;height:100%}
+.contact-body{padding:14px}
+.contact-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f2f2f2;font-size:13px}
+.contact-row:last-child{border:none}
+.contact-icon{width:26px;flex-shrink:0;text-align:center}
+.contact-link{color:var(--blue);text-decoration:none;font-weight:600}
+
+/* LIGHTBOX */
+.lbox{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:300;display:none;align-items:center;justify-content:center}
+.lbox.open{display:flex}
+.lbox img{max-width:95vw;max-height:90vh;border-radius:12px;object-fit:contain}
+.lbox-close{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.15);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* OVERLAY / MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;display:none;align-items:center;justify-content:center;padding:12px}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:20px;width:100%;max-width:460px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.4)}
+.modal-hdr{background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-hdr h2{font-size:14px;font-weight:700}
+.modal-close{background:rgba(255,255,255,.18);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
+.modal-body{overflow-y:auto;padding:14px;flex:1}
+.modal-body::-webkit-scrollbar{width:3px}
+.modal-body::-webkit-scrollbar-thumb{background:var(--blue-mid);border-radius:4px}
+
+.login-box{display:flex;flex-direction:column;gap:12px;padding:8px 0}
+.login-box h3{font-size:14px;color:#333;text-align:center}
+.login-box input{border:1.5px solid #ddd;border-radius:10px;padding:10px 14px;font-family:'Vazirmatn',sans-serif;font-size:14px;outline:none;direction:ltr;text-align:center}
+.login-box input:focus{border-color:var(--blue)}
+.login-btn{background:var(--blue);color:#fff;border:none;border-radius:10px;padding:11px;font-family:'Vazirmatn',sans-serif;font-size:14px;font-weight:600;cursor:pointer}
+.err-msg{color:#c0392b;font-size:12px;text-align:center}
+
+.apanel{display:none;flex-direction:column}
+.apanel.active{display:flex}
+.tab-bar{display:flex;border-bottom:2px solid var(--blue-light);margin-bottom:12px;flex-shrink:0;overflow-x:auto}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab{flex:1;padding:8px 4px;text-align:center;font-size:11px;font-weight:600;color:#888;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s;white-space:nowrap}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tc{display:none}.tc.active{display:block}
+
+.apc{background:#f7fafc;border:1px solid var(--blue-mid);border-radius:12px;padding:12px;margin-bottom:10px}
+.apc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;gap:8px}
+.apc-name{font-weight:700;font-size:13px;color:var(--blue-dark)}
+.apc-cat{font-size:10.5px;color:var(--gray);background:var(--blue-light);border-radius:7px;padding:2px 7px;margin-right:6px}
+.btn-del{background:#fdecea;border:1px solid #f5c6c6;color:#c0392b;border-radius:8px;padding:4px 9px;font-size:11px;cursor:pointer;font-family:'Vazirmatn',sans-serif;flex-shrink:0}
+.btn-del:hover{background:#c0392b;color:#fff}
+.sizes-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.si{display:flex;flex-direction:column;gap:3px}
+.si label{font-size:11px;color:#666}
+.si input{border:1px solid #ddd;border-radius:8px;padding:6px 8px;font-size:12px;font-family:'Vazirmatn',sans-serif;outline:none;direction:ltr;text-align:right}
+.si input:focus{border-color:var(--blue)}
+.img-up{border:2px dashed #8ab8d4;border-radius:10px;padding:12px;text-align:center;cursor:pointer;margin-bottom:9px;position:relative;transition:.2s}
+.img-up:hover{background:var(--blue-light)}
+.img-up input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.img-up-txt{font-size:11.5px;color:#888}
+
+.add-form{background:var(--blue-light);border:1.5px dashed #8ab8d4;border-radius:12px;padding:13px}
+.add-form h4{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px}
+.frow{display:flex;flex-direction:column;gap:4px;margin-bottom:9px}
+.frow label{font-size:12px;color:#555;font-weight:500}
+.frow input,.frow select{border:1.5px solid #ddd;border-radius:9px;padding:8px 11px;font-family:'Vazirmatn',sans-serif;font-size:13px;outline:none;background:#fff}
+.frow input:focus{border-color:var(--blue)}
+.sz-rows{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.szr{display:flex;gap:6px;align-items:center}
+.szr input{flex:1;border:1.5px solid #ddd;border-radius:9px;padding:7px 9px;font-family:'Vazirmatn',sans-serif;font-size:12px;outline:none;background:#fff}
+.szr input:focus{border-color:var(--blue)}
+.btn-add-sz{background:var(--white);border:1.5px solid var(--blue);color:var(--blue);border-radius:8px;padding:5px 9px;font-size:11px;cursor:pointer;font-family:'Vazirmatn',sans-serif;white-space:nowrap}
+.btn-rem-sz{background:#fdecea;border:1px solid #f5c6c6;color:#c0392b;border-radius:8px;padding:5px 7px;font-size:11px;cursor:pointer}
+.btn-save{background:var(--blue);color:#fff;border:none;border-radius:10px;padding:10px;font-family:'Vazirmatn',sans-serif;font-size:13px;font-weight:600;cursor:pointer;width:100%;margin-top:6px}
+.btn-save:hover{background:var(--blue-dark)}
+.toast{background:var(--blue-light);border:1px solid #8ab8d4;color:var(--blue-dark);border-radius:10px;padding:8px 12px;text-align:center;font-size:12px;font-weight:600;margin-top:8px;display:none}
+
+.ocard{background:#f7fafc;border:1px solid var(--blue-mid);border-radius:12px;padding:12px;margin-bottom:9px}
+.ocard-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.onum{font-weight:700;font-size:12.5px;color:var(--blue-dark)}
+.otime{font-size:10.5px;color:#aaa}
+.odetail{font-size:12px;color:#444;line-height:1.9}
+.obadge{display:inline-block;border-radius:8px;padding:2px 8px;font-size:10.5px;font-weight:600;margin-top:5px}
+.obadge.new{background:var(--accent-light);color:#b5780f}
+.obadge.done{background:var(--blue-light);color:var(--blue-dark)}
+.ocard-btns{display:flex;gap:6px;margin-top:8px}
+.btn-wa-sm{background:#25d366;color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11.5px;font-family:'Vazirmatn',sans-serif;cursor:pointer;display:flex;align-items:center;gap:4px}
+.btn-done{background:var(--blue-light);color:var(--blue-dark);border:none;border-radius:8px;padding:6px 10px;font-size:11.5px;font-family:'Vazirmatn',sans-serif;cursor:pointer}
+.no-orders{text-align:center;color:#aaa;font-size:13px;padding:24px 0}
+.orders-stats{display:flex;gap:8px;margin-bottom:12px}
+.stat-box{flex:1;background:var(--blue-light);border-radius:10px;padding:10px;text-align:center}
+.stat-num{font-size:18px;font-weight:800;color:var(--blue-dark)}
+.stat-label{font-size:10.5px;color:#666;margin-top:2px}
+
+.ssec{margin-bottom:16px}
+.ssec h4{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:8px;border-bottom:1px solid var(--blue-light);padding-bottom:5px}
+
+.cat-section-title{font-size:11.5px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.04em;margin:14px 0 8px;padding-right:2px}
+.cat-section-title:first-child{margin-top:0}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="hdr">
+    <div class="hdr-top">
+      <div class="logo-circle">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="31" fill="#ffffff"/>
+          <circle cx="32" cy="32" r="31" fill="none" stroke="#f2a93b" stroke-width="1.5"/>
+          <text x="32" y="30" text-anchor="middle" font-family="Vazirmatn, sans-serif" font-size="17" font-weight="800" fill="#073b5c">الخلیل</text>
+          <line x1="18" y1="38" x2="46" y2="38" stroke="#f2a93b" stroke-width="1.5"/>
+          <text x="32" y="49" text-anchor="middle" font-family="Vazirmatn, sans-serif" font-size="8" font-weight="600" fill="#0d5c8c" letter-spacing="0.5">SARAVAN</text>
+        </svg>
+      </div>
+      <div class="hdr-info">
+        <h1>فروشگاه الخلیل</h1>
+        <p><span class="dot"></span>سراوان · لوازم خیاطی</p>
+      </div>
+      <div class="hdr-actions">
+        <button class="hdr-btn" onclick="showTracking()">📦</button>
+        <button class="hdr-btn" onclick="openAdmin()">⚙️</button>
+      </div>
+    </div>
+    <div class="hdr-collapsible" id="hdrCollapsible">
+      <div class="search-bar">
+        <svg width="14" height="14" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="rgba(255,255,255,.7)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        <input type="text" id="searchInp" placeholder="جستجوی محصول..." oninput="doSearch(this.value)" onkeydown="if(event.key==='Enter')doSearch(this.value)"/>
+      </div>
+      <div class="filter-row" id="filterRow">
+        <div class="chip active" onclick="setFilter('all',this)">همه</div>
+        <div class="chip" onclick="setFilter('layi',this)">لایی چسب</div>
+        <div class="chip" onclick="setFilter('button',this)">دکمه</div>
+        <div class="chip" onclick="setFilter('thread',this)">نخ</div>
+        <div class="chip" onclick="setFilter('scissors',this)">قیچی</div>
+        <div class="chip" onclick="setFilter('machine',this)">لوازم چرخ</div>
+        <div class="chip" onclick="setFilter('other',this)">سایر لوازم</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="msgs" id="msgs"></div>
+
+  <div class="inp-area">
+    <button class="send-btn" onclick="sendMsg()">
+      <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+    </button>
+    <input type="text" id="userInp" placeholder="سوال خود را بنویسید..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+  </div>
+</div>
+
+<div class="lbox" id="lbox" onclick="closeLbox()">
+  <button class="lbox-close">✕</button>
+  <img id="lboxImg" src="" alt=""/>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h2>⚙️ پنل مدیریت الخلیل</h2>
+      <button class="modal-close" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <div class="login-box" id="loginBox">
+        <h3>🔐 ورود به پنل مدیریت</h3>
+        <input type="password" id="passInp" placeholder="رمز عبور" onkeydown="if(event.key==='Enter')doLogin()"/>
+        <button class="login-btn" onclick="doLogin()">ورود</button>
+        <div class="err-msg" id="errMsg"></div>
+      </div>
+      <div class="apanel" id="apanel">
+        <div class="tab-bar">
+          <div class="tab active" onclick="swTab('products')">محصولات</div>
+          <div class="tab" onclick="swTab('add')">➕ افزودن</div>
+          <div class="tab" onclick="swTab('orders')">سفارش‌ها</div>
+          <div class="tab" onclick="swTab('settings')">تنظیمات</div>
+        </div>
+        <div class="tc active" id="tc-products"></div>
+        <div class="tc" id="tc-add"></div>
+        <div class="tc" id="tc-orders"></div>
+        <div class="tc" id="tc-settings"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════ CONFIG ═══════════════
+const WA = '989154648350';
+const INSTAGRAM = 'allkhalil2';
+const STORE_ADDRESS = 'سیستان و بلوچستان، شهرستان سراوان، خیابان نبوت، فلکه قدس، بازارچه رضا';
+const PASS_KEY = 'alkhalil_pass';
+const DEF_PASS = 'alkhalil1403';
+const getPass = () => localStorage.getItem(PASS_KEY) || DEF_PASS;
+
+// category labels
+const CAT_LABELS = {
+  layi:'لایی چسب', button:'دکمه', thread:'نخ', scissors:'قیچی', machine:'لوازم چرخ خیاطی', other:'سایر لوازم'
+};
+
+// ═══════════════ DATA ═══════════════
+const DEFAULT_PRODUCTS = [
+  // ── لایی چسب مکران (درجه دو) ──
+  {id:'layi_makran_roll',name:'رول لایی چسب مکران (درجه دو)',cat:'layi',image:'',
+   sizes:[{label:'رول ربع کم',price:600000},{label:'رول یک',price:800000},{label:'رول یک ربع',price:1000000},{label:'رول یک و نیم',price:1200000},{label:'رول دو',price:1600000},{label:'رول دو و نیم',price:2000000},{label:'رول سه',price:2400000},{label:'رول شیروانی',price:950000}]},
+  {id:'layi_makran_collar',name:'کالر لایی چسب مکران (درجه دو)',cat:'layi',image:'',
+   sizes:[{label:'کالر بزرگ',price:300000},{label:'کالر کوچک',price:290000}]},
+  {id:'layi_makran_shirvani',name:'شیروانی لایی چسب مکران (درجه دو)',cat:'layi',image:'',
+   sizes:[{label:'شیروانی بزرگ',price:130000},{label:'شیروانی کوچک',price:120000}]},
+  {id:'layi_makran_metri',name:'لایی چسب مکران - متری (درجه دو)',cat:'layi',image:'',
+   sizes:[{label:'هر متر',price:350000}]},
+  // ── لایی چسب جرمنی (درجه یک) ──
+  {id:'layi_german_roll',name:'رول لایی چسب جرمنی (درجه یک)',cat:'layi',image:'',
+   sizes:[{label:'رول ربع کم',price:880000},{label:'رول یک',price:1180000},{label:'رول یک ربع',price:1470000},{label:'رول دو',price:2350000},{label:'رول دو و نیم',price:2940000},{label:'رول سه',price:3520000}]},
+  {id:'layi_german_collar',name:'کالر لایی چسب جرمنی (درجه یک)',cat:'layi',image:'',
+   sizes:[{label:'کالر بزرگ',price:440000},{label:'کالر کوچک',price:430000}]},
+  {id:'layi_german_shirvani',name:'شیروانی لایی چسب جرمنی (درجه یک)',cat:'layi',image:'',
+   sizes:[{label:'شیروانی بزرگ',price:230000},{label:'شیروانی کوچک',price:220000}]},
+  {id:'layi_german_metri',name:'لایی چسب جرمنی - متری (درجه یک)',cat:'layi',image:'',
+   sizes:[{label:'هر متر',price:500000}]},
+  // ── کالر ماستر و ون پیس ──
+  {id:'collar_master',name:'کالر ماستر',cat:'layi',image:'',
+   sizes:[{label:'کالر ماستر بزرگ',price:270000},{label:'کالر ماستر کوچک',price:260000}]},
+  {id:'van_piece',name:'ون پیس',cat:'layi',image:'',
+   sizes:[{label:'هر عدد',price:120000}]},
+  // ── نخ ──
+  {id:'thread_normal',name:'نخ خیاطی',cat:'thread',image:'',
+   sizes:[{label:'نخ معمولی',price:190000}]},
+  {id:'thread_commando',name:'نخ کماندو',cat:'thread',image:'',
+   sizes:[{label:'هر عدد',price:40000}]},
+  // ── دکمه ──
+  {id:'button_steel_orig',name:'دکمه استیل اصل',cat:'button',image:'',
+   sizes:[{label:'هر جین/بسته',price:3400000}]},
+  {id:'button_steel_china',name:'دکمه استیل چینی',cat:'button',image:'',
+   sizes:[{label:'هر جین/بسته',price:1200000}]},
+  // ── سایر لوازم ──
+  {id:'soap_pencil',name:'صابون و مداد خیاطی',cat:'other',image:'',
+   sizes:[{label:'هر عدد',price:50000}]},
+  {id:'ruler_pattern',name:'خط‌کش الگو',cat:'other',image:'',sizes:[]},
+  {id:'tape_measure',name:'انواع متر اندازه‌گیری',cat:'other',image:'',sizes:[]},
+  {id:'buttons_simple',name:'انواع دکمه ساده و پرسی',cat:'button',image:'',sizes:[]},
+  // ── قیچی ──
+  {id:'scissors_various',name:'انواع قیچی (برند PIN و سایر برندها)',cat:'scissors',image:'',sizes:[]},
+  // ── لوازم چرخ خیاطی ──
+  {id:'machine_parts',name:'لوازم چرخ خیاطی (پایه چرخ، سوزن کامپلت، ماسوره، ماکو)',cat:'machine',image:'',sizes:[]}
+];
+
+const loadP = () => { try{const s=localStorage.getItem('alkhalil_p');return s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))}catch(e){return JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))} };
+const saveP = p => localStorage.setItem('alkhalil_p',JSON.stringify(p));
+const loadO = () => { try{const s=localStorage.getItem('alkhalil_o');return s?JSON.parse(s):[]}catch(e){return []} };
+const saveO = o => localStorage.setItem('alkhalil_o',JSON.stringify(o));
+
+let prods = loadP();
+let activeFilter = 'all';
+let loggedIn = false;
+let newSizes = [{label:'',price:''}];
+let newImgData = '';
+
+const fmt = n => Number(n).toLocaleString('fa-IR') + ' تومان';
+const nowT = () => { const d=new Date(); return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0') };
+
+function filterProds(filter, search='') {
+  let list = loadP();
+  if (filter !== 'all') list = list.filter(p => p.cat === filter);
+  if (search) list = list.filter(p => p.name.includes(search) || p.sizes.some(s=>s.label.includes(search)));
+  return list;
+}
+
+// ═══════════════ CHAT RENDERING ═══════════════
+function buildPcard(p) {
+  const img = p.image
+    ? `<img class="pcard-img" src="${p.image}" onclick="openLbox('${p.image}')" alt="${p.name}"/>`
+    : `<div class="pcard-no-img">🧵</div>`;
+  const badge = /جرمنی/.test(p.name) ? '⭐ درجه یک' : /مکران/.test(p.name) ? '✅ درجه دو' : '';
+  let rows;
+  if (p.sizes && p.sizes.length) {
+    rows = p.sizes.map(s=>`<div class="pcard-row"><span class="pcard-slabel">${s.label}</span><span class="pcard-price">${fmt(s.price)}</span></div>`).join('');
+  } else {
+    rows = `<div class="pcard-row"><span class="pcard-slabel">برند و سایزهای مختلف موجود است</span></div>`;
+  }
+  const hasOrder = p.sizes && p.sizes.length;
+  return `<div class="pcard">${img}<div class="pcard-body">
+    <div class="pcard-name">${p.name}</div>
+    ${badge?`<div class="pcard-badge">${badge}</div>`:''}
+    <div class="pcard-sizes">${rows}</div>
+    <div class="pcard-actions">
+      ${hasOrder
+        ? `<button class="btn-order" onclick="showOForm('${p.id}')">🛒 ثبت سفارش</button>`
+        : `<button class="btn-order" onclick="askAboutProduct('${p.id}')">💬 استعلام قیمت و موجودی</button>`}
+      ${/کالر|یقه/.test(p.name)?`<button class="btn-size-guide" onclick="showSizeGuide()">📏 راهنما</button>`:''}
+    </div>
+  </div></div>`;
+}
+
+function askAboutProduct(prodId) {
+  const p = loadP().find(x=>x.id===prodId);
+  if (!p) return;
+  const html = `<div class="oform">
+    <h4>💬 استعلام — ${p.name}</h4>
+    <div class="ofield"><label>نام و نام خانوادگی *</label><input id="oName" placeholder="مثلاً: احمد رحیمی"/></div>
+    <div class="ofield"><label>شماره تماس *</label><input id="oPhone" type="tel" placeholder="09xxxxxxxxx"/></div>
+    <div class="ofield"><label>برند یا سایز مورد نظر</label><input id="oBrandSize" placeholder="مثلاً: قیچی برند PIN سایز ۸ اینچ"/></div>
+    <div class="ofield"><label>تعداد</label><input id="oQty" type="number" value="1" min="1" style="direction:ltr"/></div>
+    <div class="ofield"><label>توضیحات</label><textarea id="oNote" placeholder="هر توضیح اضافه‌ای..."></textarea></div>
+    <button class="btn-wa" onclick="submitInquiry('${p.id}','${p.name}')">
+      ${waIconSvg()}
+      ارسال استعلام به واتساپ
+    </button>
+    <div class="wa-hint">پس از باز شدن واتساپ، فقط دکمه ارسال 📤 را بزنید</div>
+  </div>`;
+  addMsg(html, false, true);
+}
+
+function submitInquiry(prodId, prodName) {
+  const name = document.getElementById('oName')?.value.trim();
+  const phone = document.getElementById('oPhone')?.value.trim();
+  const brandSize = document.getElementById('oBrandSize')?.value.trim();
+  const qty = document.getElementById('oQty')?.value || 1;
+  const note = document.getElementById('oNote')?.value.trim();
+  if (!name||!phone) { addMsg('⚠️ لطفاً نام و شماره تماس را وارد کنید.'); return; }
+  const orderId = 'KH-' + Date.now().toString().slice(-6);
+  const order = {id:orderId,prodId,prodName,name,phone,city:'',sizeLabel:brandSize||'نامشخص',qty,note,time:new Date().toLocaleString('fa-IR'),status:'new',isInquiry:true};
+  const orders = loadO(); orders.unshift(order); saveO(orders);
+  const txt = `💬 استعلام قیمت — فروشگاه الخلیل\n\n🔖 کد: ${orderId}\n👤 نام: ${name}\n📞 تلفن: ${phone}\n📦 محصول: ${prodName}${brandSize?'\n🏷️ برند/سایز: '+brandSize:''}\n🔢 تعداد: ${qty}${note?'\n📝 توضیحات: '+note:''}\n⏰ زمان: ${order.time}`;
+  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(txt)}`, '_blank');
+  addMsg(`✅ استعلام شما ثبت شد!\n\n🔖 کد پیگیری: ${orderId}\n\nبه‌زودی با شما تماس می‌گیریم.`);
+}
+
+function showOForm(prodId) {
+  const p = loadP().find(x=>x.id===prodId);
+  if (!p) return;
+  const opts = p.sizes.map(s=>`<option value="${s.label}|${s.price}">${s.label} — ${fmt(s.price)}</option>`).join('');
+  const html = `<div class="oform">
+    <h4>🛒 سفارش — ${p.name}</h4>
+    <div class="ofield"><label>نام و نام خانوادگی *</label><input id="oName" placeholder="مثلاً: احمد رحیمی"/></div>
+    <div class="ofield"><label>شماره تماس *</label><input id="oPhone" type="tel" placeholder="09xxxxxxxxx"/></div>
+    <div class="ofield"><label>استان / شهر</label><input id="oCity" placeholder="مثلاً: سراوان - سیستان"/></div>
+    <div class="ofield"><label>سایز / مقدار</label><select id="oSize">${opts}</select></div>
+    <div class="ofield"><label>تعداد</label><input id="oQty" type="number" value="1" min="1" style="direction:ltr"/></div>
+    <div class="ofield"><label>توضیحات</label><textarea id="oNote" placeholder="هر توضیح اضافه‌ای..."></textarea></div>
+    <button class="btn-wa" onclick="submitOrder('${p.id}','${p.name}')">
+      ${waIconSvg()}
+      ارسال سفارش به واتساپ
+    </button>
+    <div class="wa-hint">پس از باز شدن واتساپ، فقط دکمه ارسال 📤 را بزنید</div>
+  </div>`;
+  addMsg(html, false, true);
+}
+
+function waIconSvg(){
+  return `<svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.858L.057 23.552a.5.5 0 0 0 .6.6l5.694-1.476A11.953 11.953 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>`;
+}
+
+function submitOrder(prodId, prodName) {
+  const name = document.getElementById('oName')?.value.trim();
+  const phone = document.getElementById('oPhone')?.value.trim();
+  const city = document.getElementById('oCity')?.value.trim();
+  const sizeVal = document.getElementById('oSize')?.value;
+  const qty = document.getElementById('oQty')?.value || 1;
+  const note = document.getElementById('oNote')?.value.trim();
+  if (!name||!phone) { addMsg('⚠️ لطفاً نام و شماره تماس را وارد کنید.'); return; }
+  const [sizeLabel] = sizeVal.split('|');
+  const orderId = 'KH-' + Date.now().toString().slice(-6);
+  const order = {id:orderId,prodId,prodName,name,phone,city,sizeLabel,qty,note,time:new Date().toLocaleString('fa-IR'),status:'new'};
+  const orders = loadO(); orders.unshift(order); saveO(orders);
+  const txt = `🛒 سفارش جدید — فروشگاه الخلیل\n\n🔖 کد سفارش: ${orderId}\n👤 نام: ${name}\n📞 تلفن: ${phone}${city?'\n📍 شهر: '+city:''}\n📦 محصول: ${prodName}\n📐 سایز: ${sizeLabel}\n🔢 تعداد: ${qty}${note?'\n📝 توضیحات: '+note:''}\n⏰ زمان: ${order.time}`;
+  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(txt)}`, '_blank');
+  addMsg(`✅ سفارش شما ثبت شد!\n\n🔖 کد پیگیری: ${orderId}\n\nاین کد را نگه دارید تا وضعیت سفارش خود را پیگیری کنید.`);
+}
+
+function showTracking() {
+  const html = `<div class="oform">
+    <h4>📦 پیگیری سفارش</h4>
+    <div class="ofield"><label>کد پیگیری سفارش</label><input id="trackCode" placeholder="مثلاً: KH-123456" style="direction:ltr;text-align:center;font-size:14px;letter-spacing:2px"/></div>
+    <button class="btn-save" onclick="doTrack()">🔍 پیگیری</button>
+  </div>`;
+  addMsg(html, false, true);
+}
+function doTrack() {
+  const code = document.getElementById('trackCode')?.value.trim().toUpperCase();
+  if (!code) { addMsg('کد پیگیری را وارد کنید.'); return; }
+  const orders = loadO();
+  const o = orders.find(x => x.id === code);
+  if (!o) { addMsg(`❌ سفارشی با کد "${code}" یافت نشد.\nلطفاً کد را دوباره بررسی کنید.`); return; }
+  const isDone = o.status === 'done';
+  const html = `<div class="track-box">
+    <h4>📦 وضعیت سفارش ${o.id}</h4>
+    <div class="track-item"><div class="track-icon done">✅</div><div><div class="track-label">سفارش ثبت شد</div><div class="track-sub">${o.time}</div></div></div>
+    <div class="track-item"><div class="track-icon ${isDone?'done':'active'}">📞</div><div><div class="track-label">تأیید توسط فروشگاه</div><div class="track-sub">${isDone?'تأیید شده':'در انتظار تأیید'}</div></div></div>
+    <div class="track-item"><div class="track-icon ${isDone?'done':'pending'}">🚚</div><div><div class="track-label">ارسال محصول</div><div class="track-sub">${isDone?'ارسال شده':'در انتظار ارسال'}</div></div></div>
+    <div style="background:#f9f9f9;border-radius:10px;padding:10px;margin-top:8px;font-size:12px;color:#555;line-height:1.9">👤 ${o.name} | 📦 ${o.prodName}<br>📐 ${o.sizeLabel} × ${o.qty}</div>
+  </div>`;
+  addMsg(html, false, true);
+}
+
+function showSizeGuide() {
+  const html = `<div class="sg-table">
+    <div class="sg-head">📏 راهنمای انتخاب سایز یقه</div>
+    <div class="sg-row"><div class="sg-cell head">سایز</div><div class="sg-cell head">دور گردن (سانتی‌متر)</div></div>
+    <div class="sg-row"><div class="sg-cell">کالر کوچک</div><div class="sg-cell">تا حدود ۴۲ سانتی‌متر</div></div>
+    <div class="sg-row"><div class="sg-cell">کالر بزرگ</div><div class="sg-cell">بالای ۴۲ سانتی‌متر</div></div>
+    <div class="sg-row"><div class="sg-cell">شیروانی کوچک</div><div class="sg-cell">یقه‌های استاندارد</div></div>
+    <div class="sg-row"><div class="sg-cell">شیروانی بزرگ</div><div class="sg-cell">یقه‌های بزرگ‌تر</div></div>
+    <div class="sg-note">💡 برای انتخاب دقیق سایز، می‌توانید نمونه پارچه یا اندازه دقیق را با فروشگاه در میان بگذارید.</div>
+  </div>`;
+  addMsg(html, false, true);
+}
+
+function showContact() {
+  const html = `<div class="contact-card">
+    <div class="contact-head">
+      <div class="logo-big">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="31" fill="#ffffff"/>
+          <circle cx="32" cy="32" r="31" fill="none" stroke="#f2a93b" stroke-width="1.5"/>
+          <text x="32" y="30" text-anchor="middle" font-family="Vazirmatn, sans-serif" font-size="17" font-weight="800" fill="#073b5c">الخلیل</text>
+          <line x1="18" y1="38" x2="46" y2="38" stroke="#f2a93b" stroke-width="1.5"/>
+          <text x="32" y="49" text-anchor="middle" font-family="Vazirmatn, sans-serif" font-size="8" font-weight="600" fill="#0d5c8c" letter-spacing="0.5">SARAVAN</text>
+        </svg>
+      </div>
+      <div style="font-weight:700;font-size:15px">فروشگاه لوازم خیاطی الخلیل</div>
+    </div>
+    <div class="contact-body">
+      <div class="contact-row"><span class="contact-icon">📍</span><span>${STORE_ADDRESS}</span></div>
+      <div class="contact-row"><span class="contact-icon">📱</span><a class="contact-link" href="https://wa.me/${WA}" target="_blank">۰۹۱۵۴۶۴۸۳۵۰ (واتساپ)</a></div>
+      <div class="contact-row"><span class="contact-icon">📷</span><a class="contact-link" href="https://instagram.com/${INSTAGRAM}" target="_blank">@${INSTAGRAM}</a></div>
+      <div class="contact-row"><span class="contact-icon">🚚</span><span>ارسال به سراسر ایران از طریق پست و تیپاکس</span></div>
+    </div>
+  </div>`;
+  addMsg(html, false, true);
+}
+
+function buildCatList() {
+  const cats = Object.entries(CAT_LABELS);
+  const icons = {layi:'🧵',button:'🔘',thread:'🧶',scissors:'✂️',machine:'⚙️',other:'📦'};
+  let html = `<div class="cat-list">`;
+  cats.forEach(([key,label])=>{
+    html += `<div class="cat-list-item" onclick="browseCat('${key}')">
+      <span class="cat-list-name">${icons[key]||''} ${label}</span>
+      <span class="cat-list-arrow">‹</span>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+function browseCat(cat) {
+  const list = filterProds(cat);
+  if (!list.length) { addMsg('محصولی در این دسته یافت نشد.'); return; }
+  addMsg(`دسته «${CAT_LABELS[cat]}»:`);
+  addMsg(list.map(p=>buildPcard(p)).join(''), false, true);
+}
+
+// ═══════════════ SEARCH & FILTER ═══════════════
+function setFilter(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  const search = document.getElementById('searchInp').value;
+  const list = filterProds(f, search);
+  if (!list.length) { addMsg('محصولی با این فیلتر یافت نشد.'); return; }
+  addMsg(`دسته «${f==='all'?'همه محصولات':CAT_LABELS[f]}»:`);
+  addMsg(list.map(p=>buildPcard(p)).join(''), false, true);
+}
+function doSearch(val) {
+  if (!val || val.length < 2) return;
+  const list = filterProds(activeFilter, val);
+  if (!list.length) { addMsg(`نتیجه‌ای برای "${val}" یافت نشد.`); return; }
+  addMsg(`نتایج جستجو برای "${val}":`);
+  addMsg(list.map(p=>buildPcard(p)).join(''), false, true);
+}
+
+// ═══════════════ BOT LOGIC ═══════════════
+function getResp(text) {
+  const t = text.trim().toLowerCase();
+  const list = loadP();
+
+  if (/سلام|درود|خوش|hello|hi/.test(t))
+    return {text:'سلام! 👋 به فروشگاه لوازم خیاطی الخلیل خوش آمدید.\nلایی چسب، نخ، دکمه، قیچی و لوازم چرخ خیاطی — همه در یک‌جا.',
+      quickBtns:['📋 دسته‌بندی محصولات','📏 راهنمای سایز','📦 پیگیری سفارش','📞 اطلاعات تماس']};
+
+  if (/تماس|آدرس|شماره|تلفن|واتساپ|اینستا|اینستاگرام|کجا/.test(t)) { showContact(); return null; }
+  if (/راهنما|سایز|اینچ|اندازه/.test(t)) { showSizeGuide(); return null; }
+  if (/پیگیری|کد سفارش|وضعیت/.test(t)) { showTracking(); return null; }
+  if (/دسته|دسته‌بندی|محصولات$|^محصولات/.test(t)) return {html:buildCatList(), text:'دسته‌بندی محصولات الخلیل:'};
+
+  if (/مقایسه|فرق|تفاوت|بهتر|کدام بهتر/.test(t))
+    return {text:'🔍 مقایسه لایی چسب جرمنی و مکران:\n\n⭐ جرمنی (درجه یک): کیفیت بالاتر، چسبندگی قوی‌تر، دوام بیشتر\n✅ مکران (درجه دو): قیمت مناسب‌تر، مناسب تولید انبوه',
+      quickBtns:['لایی چسب جرمنی','لایی چسب مکران']};
+
+  if (/همه|کل|لیست/.test(t))
+    return {html:list.map(p=>buildPcard(p)).join(''), text:'همه محصولات فروشگاه الخلیل:'};
+
+  // category keyword matches
+  if (/لایی|چسب|یقه|کالر|رول|شیروانی/.test(t))
+    return {html:filterProds('layi').map(p=>buildPcard(p)).join(''), text:'محصولات لایی چسب:'};
+  if (/دکمه/.test(t))
+    return {html:filterProds('button').map(p=>buildPcard(p)).join(''), text:'انواع دکمه:'};
+  if (/نخ/.test(t))
+    return {html:filterProds('thread').map(p=>buildPcard(p)).join(''), text:'انواع نخ:'};
+  if (/قیچی/.test(t))
+    return {html:filterProds('scissors').map(p=>buildPcard(p)).join(''), text:'انواع قیچی:'};
+  if (/چرخ|سوزن|ماسوره|ماکو/.test(t))
+    return {html:filterProds('machine').map(p=>buildPcard(p)).join(''), text:'لوازم چرخ خیاطی:'};
+
+  for (const p of list) {
+    const words = p.name.split(' ').filter(w=>w.length>1);
+    if (words.some(w=>t.includes(w.toLowerCase())))
+      return {html:buildPcard(p), text:`${p.name}:`};
+  }
+
+  return {text:'می‌توانم در مورد این موارد کمک کنم:',
+    quickBtns:['📋 دسته‌بندی محصولات','📏 راهنمای سایز','🔍 مقایسه جرمنی و مکران','📦 پیگیری سفارش','📞 اطلاعات تماس']};
+}
+
+// ═══════════════ MSG ENGINE ═══════════════
+function addMsg(content, isUser=false, isHtml=false) {
+  const msgs = document.getElementById('msgs');
+  const div = document.createElement('div'); div.className=`msg ${isUser?'user':'bot'}`;
+  const bubble = document.createElement('div'); bubble.className='bubble';
+  if (isHtml) { bubble.innerHTML=content } else { bubble.textContent=content; bubble.style.whiteSpace='pre-line' }
+  div.appendChild(bubble);
+  const t = document.createElement('div'); t.className='msg-time'; t.textContent=nowT(); div.appendChild(t);
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
+}
+function addQuick(btns) {
+  const msgs = document.getElementById('msgs');
+  const div = document.createElement('div'); div.className='msg bot';
+  const inner = document.createElement('div'); inner.className='qbtns';
+  btns.forEach(b=>{
+    const btn = document.createElement('button'); btn.className='qbtn'; btn.textContent=b;
+    btn.onclick=()=>{ inner.parentElement.remove(); processInput(b.replace(/[📋📏🔍📦📞]/g,'').trim()) };
+    inner.appendChild(btn);
+  });
+  div.appendChild(inner); msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
+}
+function showTyping() {
+  const msgs = document.getElementById('msgs');
+  const div = document.createElement('div'); div.className='msg bot'; div.id='typing-ind';
+  div.innerHTML='<div class="typing-wrap"><span></span><span></span><span></span></div>';
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
+}
+function removeTyping() { const t=document.getElementById('typing-ind'); if(t)t.remove() }
+function processInput(text) {
+  addMsg(text, true); showTyping();
+  setTimeout(()=>{
+    removeTyping();
+    const r = getResp(text);
+    if (!r) return;
+    if (r.text && r.html) { addMsg(r.text); addMsg(r.html,false,true) }
+    else if (r.html) { addMsg(r.html,false,true) }
+    else { addMsg(r.text) }
+    if (r.quickBtns) addQuick(r.quickBtns);
+  }, 650);
+}
+function sendMsg() { const inp=document.getElementById('userInp'); const t=inp.value.trim(); if(!t)return; inp.value=''; processInput(t) }
+
+function openLbox(src) { document.getElementById('lboxImg').src=src; document.getElementById('lbox').classList.add('open') }
+function closeLbox() { document.getElementById('lbox').classList.remove('open') }
+
+// ═══════════════ ADMIN ═══════════════
+function openAdmin() {
+  document.getElementById('overlay').classList.add('open');
+  if (!loggedIn) { document.getElementById('loginBox').style.display='flex'; document.getElementById('apanel').classList.remove('active'); document.getElementById('passInp').value=''; document.getElementById('errMsg').textContent='' }
+}
+function closeAdmin() { document.getElementById('overlay').classList.remove('open') }
+function doLogin() {
+  if (document.getElementById('passInp').value === getPass()) {
+    loggedIn=true; document.getElementById('loginBox').style.display='none'; document.getElementById('apanel').classList.add('active');
+    renderProdsTab(); renderAddTab(); renderOrdersTab(); renderSettingsTab();
+  } else { document.getElementById('errMsg').textContent='رمز عبور اشتباه است!' }
+}
+function swTab(name) {
+  const names=['products','add','orders','settings'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
+  document.querySelectorAll('.tc').forEach(tc=>tc.classList.remove('active'));
+  document.getElementById('tc-'+name).classList.add('active');
+  if (name==='orders') renderOrdersTab();
+}
+
+// Products tab — grouped by category
+function renderProdsTab() {
+  const list = loadP();
+  let html='';
+  Object.entries(CAT_LABELS).forEach(([catKey,catLabel])=>{
+    const items = list.map((p,i)=>({...p,_idx:i})).filter(p=>p.cat===catKey);
+    if (!items.length) return;
+    html += `<div class="cat-section-title">${catLabel}</div>`;
+    items.forEach(p=>{
+      const pi = p._idx;
+      const imgHtml = p.image ? `<img src="${p.image}" style="width:100%;height:90px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:block"/>` : '';
+      html += `<div class="apc">
+        <div class="apc-head"><span class="apc-name">${p.name}</span><button class="btn-del" onclick="delProd(${pi})">حذف</button></div>
+        <div class="img-up" onclick="document.getElementById('imgUp${pi}').click()">
+          ${imgHtml}<div class="img-up-txt">📷 کلیک برای آپلود / تغییر عکس</div>
+          <input type="file" id="imgUp${pi}" accept="image/*" style="display:none" onchange="uploadImg(${pi},this)"/>
+        </div>
+        <div class="img-up-status" id="imgStatus${pi}" style="display:none;font-size:11.5px;color:#c0392b;margin:-4px 0 9px;text-align:center"></div>
+        <div class="sizes-grid">`;
+      p.sizes.forEach((s,si)=>{ html+=`<div class="si"><label>${s.label}</label><input type="number" value="${s.price}" onchange="updPrice(${pi},${si},this.value)"/></div>` });
+      html+=`</div>
+        ${p.sizes.length?`<button class="btn-save" style="margin-top:8px" onclick="savePrices(${pi})">💾 ذخیره قیمت‌ها</button>`:`<div style="font-size:11.5px;color:#999;margin-top:4px">این محصول سایز/قیمت ثابت ندارد (استعلامی)</div>`}
+        <div class="toast" id="toast-${pi}">✅ ذخیره شد!</div></div>`;
+    });
+  });
+  document.getElementById('tc-products').innerHTML = html || '<div style="text-align:center;color:#aaa;padding:20px">محصولی موجود نیست</div>';
+}
+function uploadImg(pi, input) {
+  if (!input.files||!input.files[0]) return;
+  const file = input.files[0];
+  showImgStatus(pi, '⏳ در حال پردازش عکس...');
+  compressImage(file, 600, 0.7, (dataUrl, err) => {
+    if (err || !dataUrl) {
+      showImgStatus(pi, '❌ این فرمت عکس پشتیبانی نمی‌شود. لطفاً یک عکس JPG یا PNG انتخاب کنید.');
+      return;
+    }
+    try {
+      const p = loadP();
+      p[pi].image = dataUrl;
+      saveP(p);
+      renderProdsTab();
+    } catch(e) {
+      showImgStatus(pi, '❌ حافظه مرورگر پر است. چند عکس قبلی را حذف کنید.');
+    }
+  });
+}
+function showImgStatus(pi, msg) {
+  const el = document.getElementById('imgStatus'+pi);
+  if (el) { el.textContent = msg; el.style.display='block'; }
+  else { alert(msg); }
+}
+
+// Compress + resize image client-side before storing as base64 (keeps localStorage usage low)
+function compressImage(file, maxDim, quality, callback) {
+  if (!file.type || !file.type.startsWith('image/')) { callback(null, 'not-image'); return; }
+  let done = false;
+  const safeCallback = (url, err) => { if (done) return; done = true; callback(url, err); };
+  const failTimer = setTimeout(() => safeCallback(null, 'timeout'), 8000);
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      clearTimeout(failTimer);
+      try {
+        let w = img.width, h = img.height;
+        if (!w || !h) { safeCallback(null, 'bad-dims'); return; }
+        if (w > h && w > maxDim) { h = Math.round(h * maxDim / w); w = maxDim; }
+        else if (h >= w && h > maxDim) { w = Math.round(w * maxDim / h); h = maxDim; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        safeCallback(dataUrl, null);
+      } catch(err) { safeCallback(null, err); }
+    };
+    img.onerror = () => { clearTimeout(failTimer); safeCallback(null, 'decode-error'); };
+    img.src = e.target.result;
+  };
+  reader.onerror = () => { clearTimeout(failTimer); safeCallback(null, 'read-error'); };
+  reader.readAsDataURL(file);
+}
+function updPrice(pi,si,val) { const p=loadP(); p[pi].sizes[si].price=parseInt(val)||0; prods=p }
+function savePrices(pi) { saveP(prods); const t=document.getElementById('toast-'+pi); t.style.display='block'; setTimeout(()=>t.style.display='none',2000) }
+function delProd(pi) { if(!confirm('حذف شود؟'))return; const p=loadP(); p.splice(pi,1); saveP(p); prods=p; renderProdsTab() }
+
+// Add tab
+function renderAddTab() {
+  let szHtml='';
+  newSizes.forEach((s,i)=>{
+    szHtml+=`<div class="szr">
+      <input placeholder="نام سایز/برند" value="${s.label}" onchange="newSizes[${i}].label=this.value"/>
+      <input type="number" placeholder="قیمت" value="${s.price}" style="max-width:95px" onchange="newSizes[${i}].price=this.value"/>
+      ${i>0?`<button class="btn-rem-sz" onclick="remSz(${i})">✕</button>`:''}
+    </div>`;
+  });
+  const catOpts = Object.entries(CAT_LABELS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+  document.getElementById('tc-add').innerHTML=`
+    <div class="add-form">
+      <h4>➕ افزودن محصول جدید</h4>
+      <div class="frow"><label>نام محصول *</label><input type="text" id="nName" placeholder="مثلاً: قیچی برند PIN سایز ۸"/></div>
+      <div class="frow"><label>دسته‌بندی</label><select id="nCat">${catOpts}</select></div>
+      <div class="img-up" onclick="document.getElementById('nImgUp').click()" style="margin-bottom:4px">
+        <img id="nImgPrev" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:6px;display:none"/>
+        <div class="img-up-txt">📷 عکس محصول (اختیاری)</div>
+        <input type="file" id="nImgUp" accept="image/*" style="display:none" onchange="prevNewImg(this)"/>
+      </div>
+      <div id="nImgStatus" style="display:none;font-size:11.5px;color:#c0392b;margin:0 0 9px;text-align:center"></div>
+      <div class="frow"><label>سایز/برند و قیمت (اختیاری — اگر خالی بماند محصول به‌صورت استعلامی نمایش داده می‌شود)</label></div>
+      <div id="szRows">${szHtml}</div>
+      <button class="btn-add-sz" onclick="addSz()">+ ردیف جدید</button>
+      <button class="btn-save" onclick="saveNewProd()">💾 ذخیره محصول</button>
+      <div class="toast" id="addToast">✅ محصول اضافه شد!</div>
+    </div>`;
+}
+function prevNewImg(input) {
+  if (!input.files||!input.files[0]) return;
+  const statusEl = document.getElementById('nImgStatus');
+  if (statusEl) { statusEl.style.display='block'; statusEl.style.color='#666'; statusEl.textContent='⏳ در حال پردازش عکس...'; }
+  compressImage(input.files[0], 600, 0.7, (dataUrl, err) => {
+    if (err || !dataUrl) {
+      if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent='❌ این فرمت عکس پشتیبانی نمی‌شود. لطفاً یک عکس JPG یا PNG انتخاب کنید.'; }
+      return;
+    }
+    if (statusEl) statusEl.style.display='none';
+    newImgData = dataUrl;
+    const p = document.getElementById('nImgPrev');
+    p.src = dataUrl; p.style.display = 'block';
+  });
+}
+function addSz() { newSizes.push({label:'',price:''}); renderAddTab() }
+function remSz(i) { newSizes.splice(i,1); renderAddTab() }
+function saveNewProd() {
+  const name=document.getElementById('nName').value.trim();
+  if (!name) { alert('نام محصول را وارد کنید'); return }
+  const cat=document.getElementById('nCat').value;
+  // size/price rows are optional — only rows where BOTH label and price are filled are kept
+  const sizes=newSizes.filter(s=>s.label && s.price).map(s=>({label:s.label,price:parseInt(s.price)||0}));
+  try {
+    const p=loadP(); p.push({id:'c_'+Date.now(),name,cat,image:newImgData||'',sizes}); saveP(p); prods=p;
+  } catch(e) {
+    alert('حافظه مرورگر پر است. لطفاً عکس کوچک‌تری استفاده کنید یا چند محصول قدیمی را حذف کنید.');
+    return;
+  }
+  newSizes=[{label:'',price:''}]; newImgData='';
+  const t=document.getElementById('addToast'); t.style.display='block';
+  setTimeout(()=>{t.style.display='none';renderProdsTab();swTab('products')},1500);
+}
+
+// Orders tab
+function renderOrdersTab() {
+  const orders=loadO();
+  const total=orders.length, done=orders.filter(o=>o.status==='done').length, newO=total-done;
+  let html=`<div class="orders-stats">
+    <div class="stat-box"><div class="stat-num">${total}</div><div class="stat-label">کل سفارش</div></div>
+    <div class="stat-box"><div class="stat-num">${newO}</div><div class="stat-label">در انتظار</div></div>
+    <div class="stat-box"><div class="stat-num">${done}</div><div class="stat-label">تکمیل شده</div></div>
+  </div>`;
+  if (!orders.length) { html+='<div class="no-orders">هنوز سفارشی ثبت نشده</div>'; document.getElementById('tc-orders').innerHTML=html; return }
+  orders.forEach((o,i)=>{
+    const isDone=o.status==='done';
+    const waTxt=`${o.isInquiry?'💬 استعلام':'🛒 سفارش'} ${o.id}\n👤 ${o.name}\n📞 ${o.phone}\n📦 ${o.prodName}\n📐 ${o.sizeLabel} × ${o.qty}${o.note?'\n📝 '+o.note:''}`;
+    html+=`<div class="ocard">
+      <div class="ocard-head"><span class="onum">${o.isInquiry?'💬':'🛒'} ${o.id}</span><span class="otime">${o.time}</span></div>
+      <div class="odetail">👤 ${o.name} | 📞 ${o.phone}${o.city?' | 📍 '+o.city:''}<br>📦 ${o.prodName} | 📐 ${o.sizeLabel} × ${o.qty}${o.note?'<br>📝 '+o.note:''}</div>
+      <span class="obadge ${isDone?'done':'new'}">${isDone?'✅ تکمیل شده':'🕐 در انتظار'}</span>
+      <div class="ocard-btns">
+        <button class="btn-wa-sm" onclick="window.open('https://wa.me/${WA}?text=${encodeURIComponent(waTxt)}','_blank')">واتساپ</button>
+        ${!isDone?`<button class="btn-done" onclick="markDone(${i})">✅ تکمیل شد</button>`:''}
+      </div>
+    </div>`;
+  });
+  document.getElementById('tc-orders').innerHTML=html;
+}
+function markDone(i) { const o=loadO(); o[i].status='done'; saveO(o); renderOrdersTab() }
+
+// Settings tab
+function renderSettingsTab() {
+  document.getElementById('tc-settings').innerHTML=`
+    <div class="ssec">
+      <h4>🔐 تغییر رمز عبور</h4>
+      <div class="frow"><label>رمز فعلی</label><input type="password" id="oP"/></div>
+      <div class="frow"><label>رمز جدید (حداقل ۴ کاراکتر)</label><input type="password" id="nP1"/></div>
+      <div class="frow"><label>تکرار رمز جدید</label><input type="password" id="nP2"/></div>
+      <button class="btn-save" onclick="chPass()">تغییر رمز</button>
+      <div class="toast" id="pToast">✅ رمز با موفقیت تغییر کرد!</div>
+      <div class="err-msg" id="pErr" style="margin-top:6px"></div>
+    </div>
+    <div class="ssec">
+      <h4>🗑️ حذف سفارش‌های تکمیل‌شده</h4>
+      <button class="btn-del" style="width:100%;padding:9px;font-size:12.5px" onclick="clearDone()">حذف سفارش‌های تکمیل‌شده</button>
+    </div>
+    <div class="ssec">
+      <h4>🔄 بازگردانی قیمت‌های پیش‌فرض</h4>
+      <button class="btn-del" style="width:100%;padding:9px;font-size:12.5px" onclick="resetDef()">بازگردانی به حالت اولیه</button>
+    </div>`;
+}
+function chPass() {
+  const o=document.getElementById('oP').value, n1=document.getElementById('nP1').value, n2=document.getElementById('nP2').value;
+  if (o!==getPass()) { document.getElementById('pErr').textContent='رمز فعلی اشتباه است'; return }
+  if (!n1||n1.length<4) { document.getElementById('pErr').textContent='رمز جدید حداقل ۴ کاراکتر باشد'; return }
+  if (n1!==n2) { document.getElementById('pErr').textContent='رمزهای جدید یکسان نیستند'; return }
+  localStorage.setItem(PASS_KEY,n1); document.getElementById('pErr').textContent='';
+  const t=document.getElementById('pToast'); t.style.display='block'; setTimeout(()=>t.style.display='none',2500);
+}
+function clearDone() { if(!confirm('سفارش‌های تکمیل‌شده حذف شوند؟'))return; const o=loadO().filter(x=>x.status!=='done'); saveO(o); renderOrdersTab() }
+function resetDef() { if(!confirm('همه تغییرات محصولات پاک می‌شود. ادامه می‌دهید؟'))return; saveP(JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))); prods=loadP(); renderProdsTab(); alert('بازگردانی انجام شد.') }
+
+// ═══════════════ INIT ═══════════════
+window.onload = () => {
+  setTimeout(()=>{
+    addMsg('سلام! 👋 به فروشگاه لوازم خیاطی الخلیل خوش آمدید.\n\nلایی چسب، نخ، دکمه، قیچی و لوازم چرخ خیاطی\n🚚 ارسال به سراسر ایران');
+    setTimeout(()=>addQuick(['📋 دسته‌بندی محصولات','📏 راهنمای سایز','🔍 مقایسه جرمنی و مکران','📦 پیگیری سفارش','📞 اطلاعات تماس']),400);
+  },500);
+};
+
+// Keep messages scrolled to bottom when keyboard opens/closes (fixed positioning handles the rest)
+function fixShellHeight() {
+  const msgs = document.getElementById('msgs');
+  if (msgs) msgs.scrollTop = msgs.scrollHeight;
+}
+
+// Collapse header (search + filters) when the on-screen keyboard is open, so message bubbles
+// stay visible between the profile bar and the input — like WhatsApp's compact header.
+let initialViewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+function handleViewportResize() {
+  const hdr = document.querySelector('.hdr');
+  const currentHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  const shrunk = initialViewportHeight - currentHeight;
+  if (hdr) {
+    if (shrunk > 120) hdr.classList.add('compact');
+    else hdr.classList.remove('compact');
+  }
+  fixShellHeight();
+}
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', handleViewportResize);
+} else {
+  window.addEventListener('resize', handleViewportResize);
+}
+const userInpEl = document.getElementById('userInp');
+if (userInpEl) {
+  userInpEl.addEventListener('focus', () => {
+    document.querySelector('.hdr')?.classList.add('compact');
+    setTimeout(fixShellHeight, 300);
+  });
+  userInpEl.addEventListener('blur', () => {
+    setTimeout(() => {
+      const currentHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      if (initialViewportHeight - currentHeight < 120) {
+        document.querySelector('.hdr')?.classList.remove('compact');
+      }
+    }, 200);
+  });
+}
+
+</script>
+</body>
+</html>
